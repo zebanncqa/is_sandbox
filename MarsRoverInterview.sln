@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarsRoverInterview.Console", "MarsRoverInterview\MarsRoverInterview.Console.csproj", "{44682B78-0105-425C-AF30-9A0F8B8AE948}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarsRoverInterview.Services", "MarsRoverInterview.Services\MarsRoverInterview.Services.csproj", "{DBBC946B-8C02-46D5-9BA5-7C6E1D308ED3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarsRoverInterview.Common", "MarsRoverInterview.Common\MarsRoverInterview.Common.csproj", "{E92EB2A9-2048-441A-B11F-533DB885D810}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44682B78-0105-425C-AF30-9A0F8B8AE948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44682B78-0105-425C-AF30-9A0F8B8AE948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44682B78-0105-425C-AF30-9A0F8B8AE948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44682B78-0105-425C-AF30-9A0F8B8AE948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBBC946B-8C02-46D5-9BA5-7C6E1D308ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBBC946B-8C02-46D5-9BA5-7C6E1D308ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBBC946B-8C02-46D5-9BA5-7C6E1D308ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBBC946B-8C02-46D5-9BA5-7C6E1D308ED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E92EB2A9-2048-441A-B11F-533DB885D810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E92EB2A9-2048-441A-B11F-533DB885D810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E92EB2A9-2048-441A-B11F-533DB885D810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E92EB2A9-2048-441A-B11F-533DB885D810}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E19AC497-9B68-4518-BFF7-17AD03F51839}
+	EndGlobalSection
+EndGlobal
