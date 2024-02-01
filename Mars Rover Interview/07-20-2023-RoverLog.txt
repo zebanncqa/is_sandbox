@@ -1,0 +1,7 @@
+grid: 10 10
+command: LMMMM
+pos: 1 5 N
+command: RMMMRMMMM
+pos: 4 1 N
+command: LMLMLMMM
+pos: 6 0 N

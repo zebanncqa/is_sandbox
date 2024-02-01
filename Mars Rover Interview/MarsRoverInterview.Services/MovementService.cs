@@ -1,14 +1,7 @@
-﻿using MarsRoverInterview.Common.DTOs;
-using MarsRoverInterview.Common.Enums;
+﻿using MarsRoverInterview.Common.Enums;
 using MarsRoverInterview.Common.Models;
 using MarsRoverInterview.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace MarsRoverInterview.Services
 {
@@ -49,7 +42,7 @@ namespace MarsRoverInterview.Services
 
         public async Task<Grid> GetGrid()
         {
-            return grid;
+            return grid ?? new Grid();
         }
 
         public async Task<bool> ValidateHeadingInput(string desiredHeading)
