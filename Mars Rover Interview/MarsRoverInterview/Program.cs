@@ -1,11 +1,10 @@
-﻿using MarsRoverInterview.Common.DTOs;
-using MarsRoverInterview.Common.Enums;
+﻿using MarsRoverInterview.Common.Enums;
 using MarsRoverInterview.Common.Models;
 using MarsRoverInterview.Services;
 using MarsRoverInterview.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System.Data;
-using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 #region DI and Startup
 var services = new ServiceCollection();
@@ -33,6 +32,94 @@ public class ConsoleHarness
     }
 
     public async Task Start()
+    {
+        Console.WriteLine("Welcome to the mars rover app.");
+
+        var responseInvalid = true;
+
+        while (responseInvalid)
+        {
+            Console.WriteLine("R = Replay Log File C = Command Rover");
+            var response = Console.ReadLine().ToLower();
+
+            var regex = new Regex(@"[^rc]");
+
+            if (response is null || regex.Matches(response).Any())
+            {
+                Console.WriteLine("Please enter R for replaying the logs or C for commanding a rover");
+                responseInvalid = true;
+            }
+            else if (response.Equals("c", StringComparison.OrdinalIgnoreCase))
+            {
+                await CommandRover();
+                responseInvalid = false;
+            }
+            else
+            {
+                responseInvalid = false;
+                await ReplayLog();
+            }
+        }
+
+    }
+
+    public async Task ReplayLog()
+    {
+        Console.WriteLine("Please enter the date that you would like to replay. The expected format is MM-dd-yyyy");
+        var dateString = Console.ReadLine();
+        DateTime logDate;
+
+        while (!DateTime.TryParse(dateString, out logDate))
+        {
+            Console.WriteLine("Please enter a date in the proper format of MM-dd-yyyy");
+            dateString = Console.ReadLine();
+        }
+
+        string logPath = $@"{System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{logDate.ToString("MM-dd-yyyy")}-RoverLog.txt";
+
+        var replayRover = new Rover();
+
+        foreach (var line in File.ReadAllLines(logPath).Reverse())
+        {
+            var logType = line.Split(':')[0].Trim();
+            var message = line.Split(':')[1].Trim();
+
+            switch (logType.ToLower())
+            {
+                case "grid":
+                    var gridX = int.Parse(message.Split(' ')[0]);
+                    var gridY = int.Parse(message.Split(' ')[1]);
+
+                    Console.WriteLine($"The grid was set to: x: {gridX} y: {gridY}");
+                    break;
+                case "pos":
+                    var currX = int.Parse(message.Split(' ')[0]);
+                    var currY = int.Parse(message.Split(' ')[1]);
+                    var currHeading = message.Split(' ')[2];
+                    Console.WriteLine($"The rover was at a position of {currX}, {currY}, {currHeading}");
+                    replayRover.XCoordinate = currX;
+                    replayRover.YCoordinate = currY;
+                    replayRover.Heading = currHeading;
+                    break;
+                case "command":
+                    var currentCmd = line.Split(" ")[1].Trim();
+                    Console.WriteLine($"The command that the rover received here was: {currentCmd}");
+                    replayRover.PreviousCommands.Add(currentCmd);
+                    break;
+            }
+        }
+
+        var responseInvalid = true;
+
+        var grid = await _movementService.GetGrid();
+
+        if (grid.XCoordinateMax < replayRover.XCoordinate || grid.YCoordinateMax < replayRover.YCoordinate)
+            Console.WriteLine($"Unfortunately, the rover fell off of the grid. The last known coordinates were {replayRover.ReportCoordinates()}");
+        else
+            Console.WriteLine($"The final position of the rover is {replayRover.ReportCoordinates()}");
+    }
+
+    public async Task CommandRover()
     {
         Console.WriteLine("Welcome to the mars rover app.");
 
@@ -72,7 +159,7 @@ public class ConsoleHarness
                     Console.WriteLine("You've entered something other than y or n");
                     goodResponse = false;
                 }
-            }            
+            }
         }
         while (moveRover);
     }
@@ -104,6 +191,7 @@ public class ConsoleHarness
 
         }
         while (xCoord == -1 || yCoord == -1);
+        await WriteToLog("grid", $"{xCoord} {yCoord}");
     }
 
     private async Task GetRoverCoords()
@@ -166,6 +254,7 @@ public class ConsoleHarness
         while (string.IsNullOrEmpty(desiredCommand));
 
         rover.CurrentCommand = desiredCommand;
+        await WriteToLog("command", $"{desiredCommand}");
     }
 
     private async Task AttemptToMoveRover()
@@ -184,5 +273,15 @@ public class ConsoleHarness
                 Console.WriteLine("The rover could not move because it is on the edge of the grid and has stopped to avoid being out of the area.");
                 break;
         }
+        await WriteToLog("pos", $"{updatedRover.XCoordinate} {updatedRover.YCoordinate} {updatedRover.Heading}");
+    }
+
+    private async Task WriteToLog(string type, string message)
+    {
+        var fileName = $@"{System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{DateTime.Now.Date.ToString("MM-dd-yyyy")}-RoverLog.txt";
+
+        using var fs = new FileStream(fileName, FileMode.Append);
+        using var sw = new StreamWriter(fs);
+        await sw.WriteLineAsync($"{type}: {message}");
     }
 }

@@ -8,8 +8,8 @@ namespace MarsRoverInterview.Common.Models
 {
     public class Grid
     {
-        public int XCoordinateMax { get; set; }
-        public int YCoordinateMax { get; set; }
+        public int XCoordinateMax { get; set; } = 1;
+        public int YCoordinateMax { get; set; } = 1;
         public int MaximumAmountOfRovers { get; set; }
     }
 }

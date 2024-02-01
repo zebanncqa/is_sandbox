@@ -1,5 +1,4 @@
-﻿using MarsRoverInterview.Common.DTOs;
-using MarsRoverInterview.Common.Models;
+﻿using MarsRoverInterview.Common.Models;
 
 namespace MarsRoverInterview.Services.Interfaces
 {
